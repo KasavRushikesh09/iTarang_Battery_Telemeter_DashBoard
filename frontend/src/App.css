@@ -434,3 +434,105 @@ tr:nth-child(even) {
   background: #aaa;
   cursor: not-allowed;
 }
+
+/* ============== 3D & ANIMATIONS ============== */
+
+/* 3D Perspective container */
+.status-cards {
+  perspective: 1600px;
+}
+
+/* 3D hover tilt + lift */
+.card {
+  transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              box-shadow 0.45s ease;
+  transform-style: preserve-3d;
+}
+
+.card:hover {
+  transform: translateY(-14px) rotateX(12deg) rotateY(12deg);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.25);
+}
+
+/* Animated battery fill */
+.battery-svg {
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.3));
+}
+
+.battery-fill {
+  transition: width 900ms cubic-bezier(0.34, 1.56, 0.64, 1); /* bouncy pop */
+}
+
+/* Section entrance animation */
+.grid-section {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: fadeInUp 0.7s forwards;
+}
+
+.grid-section:nth-child(1) { animation-delay: 0.1s; }
+.grid-section:nth-child(2) { animation-delay: 0.2s; }
+.grid-section:nth-child(3) { animation-delay: 0.3s; }
+.grid-section:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Live pulse */
+.live-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.live-dot::before {
+  content: '●';
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Days selector */
+.days-select {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(148,163,184,0.4);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.app.dark .days-select {
+  background: rgba(15,23,42,0.9);
+  border-color: #475569;
+}
+
+/* Enhanced table row hover */
+table tbody tr {
+  transition: all 0.3s ease;
+}
+
+table tbody tr:hover {
+  background-color: rgba(34, 197, 94, 0.15) !important;
+  transform: scale(1.02);
+}
+
+/* Pagination buttons */
+.pagination button {
+  transition: all 0.3s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+}

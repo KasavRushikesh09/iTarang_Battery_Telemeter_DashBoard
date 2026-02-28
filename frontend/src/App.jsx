@@ -20,49 +20,39 @@ function formatTimestamp(ms) {
 }
 
 function App() {
- // In App.jsx
+  const [telemetry, setTelemetry] = useState([]);
+  const [pagination, setPagination] = useState(null);
+  const [days, setDays] = useState(3);
+  const [page, setPage] = useState(1);
+  const [error, setError] = useState('');
+  const [darkMode, setDarkMode] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-const [telemetry, setTelemetry] = useState([]);
-const [pagination, setPagination] = useState(null);
-const [days, setDays] = useState(3);           // default last 3 days
-const [page, setPage] = useState(1);
-const [error, setError] = useState('');
-const [darkMode, setDarkMode] = useState(false);
-const [loading, setLoading] = useState(true);
-
-useEffect(() => {
-  async function fetchData() {
-    try {
-      setLoading(true);
-      setError('');
-      const res = await axios.get(
-      `${API_BASE_URL}/api/telemetry?page=${page}&limit=50`
-      );
-
-      setTelemetry(res.data.data);
-      setPagination(res.data);
-    } catch (err) {
-      console.error(err);
-      setError(
-        'Failed to load telemetry data. Make sure the backend is running on port 4000.'
-      );
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+        setError('');
+        const res = await axios.get(
+          `${API_BASE_URL}/api/telemetry?page=${page}&limit=50&days=${days}`
+        );
+        setTelemetry(res.data.data || []);
+        setPagination(res.data);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to load telemetry data. Make sure backend is running on port 4000.');
+      } finally {
+        setLoading(false);
+      }
     }
-  }
+    fetchData();
+  }, [page, days]);
 
-  fetchData();
-
-}, [page]);
-
-  const latest = useMemo(
-    () => (telemetry.length ? telemetry[0] : null),
-    [telemetry]
-  );
+  const latest = useMemo(() => (telemetry.length ? telemetry[0] : null), [telemetry]);
 
   if (loading) {
     return (
-      <div className={`app app-loading ${darkMode ? 'dark' : 'light'}`}>
+      <div className={`app app-loading ${darkMode ? 'dark' : ''}`}>
         <div className="loader" />
         <p>Loading battery telemetry…</p>
       </div>
@@ -71,7 +61,7 @@ useEffect(() => {
 
   if (error) {
     return (
-      <div className={`app app-error ${darkMode ? 'dark' : 'light'}`}>
+      <div className={`app app-error ${darkMode ? 'dark' : ''}`}>
         <h2>Something went wrong</h2>
         <p>{error}</p>
       </div>
@@ -79,15 +69,20 @@ useEffect(() => {
   }
 
   return (
-    <div className={`app ${darkMode ? 'dark' : 'light'}`}>
+    <div className={`app ${darkMode ? 'dark' : ''}`}>
       <header className="app-header">
         <div>
           <h1>Battery Telemetry Dashboard</h1>
           <p className="subtitle">
-            Live health & performance view for a single e-rickshaw battery
+            Live health &amp; performance view for a single e-rickshaw battery
           </p>
         </div>
+
         <div className="header-controls">
+          {/* Live indicator */}
+          <div className="live-dot">● Live</div>
+
+          {/* Dark mode */}
           <div className="dark-toggle">
             <span>{darkMode ? 'Dark' : 'Light'} mode</span>
             <label className="switch">
@@ -96,9 +91,25 @@ useEffect(() => {
                 checked={darkMode}
                 onChange={() => setDarkMode((v) => !v)}
               />
-              <span className="slider round" />
+              <span className="slider" />
             </label>
           </div>
+
+          {/* Days filter */}
+          <select
+            value={days}
+            onChange={(e) => {
+              setPage(1);
+              setDays(Number(e.target.value));
+            }}
+            className="days-select"
+          >
+            <option value={1}>Last 1 day</option>
+            <option value={3}>Last 3 days</option>
+            <option value={7}>Last 7 days</option>
+            <option value={30}>Last 30 days</option>
+          </select>
+
           {latest && (
             <div className="timestamp-pill">
               Last sample: {formatTimestamp(latest.time)}
@@ -124,33 +135,27 @@ useEffect(() => {
           <DataTable data={telemetry} />
         </section>
 
+        {/* Pagination */}
         <div className="pagination">
-  <button
-    onClick={() => setPage(p => Math.max(p - 1, 1))}
-    disabled={page === 1}
-  >
-    Prev
-  </button>
-
-  <span>
-    Page {page} of {pagination?.totalPages || 1}
-  </span>
-
-  <button
-    onClick={() =>
-      setPage(p =>
-        pagination && p < pagination.totalPages ? p + 1 : p
-      )
-    }
-    disabled={page === pagination?.totalPages}
-  >
-    Next
-  </button>
-</div>
-
+          <button onClick={() => setPage(p => Math.max(p - 1, 1))} disabled={page === 1}>
+            Prev
+          </button>
+          <span>Page {page} of {pagination?.totalPages || 1}</span>
+          <button
+            onClick={() =>
+              setPage(p =>
+                pagination && p < pagination.totalPages ? p + 1 : p
+              )
+            }
+            disabled={page === pagination?.totalPages}
+          >
+            Next
+          </button>
+        </div>
       </main>
     </div>
   );
 }
 
 export default App;
+
