@@ -67,6 +67,7 @@ function DataTable({ data }) {
                   )}
                 </th>
               ))}
+              
             </tr>
           </thead>
           <tbody>
@@ -93,7 +94,7 @@ function DataTable({ data }) {
       </p>
     </div>
 
-    
+
   );
 }
 

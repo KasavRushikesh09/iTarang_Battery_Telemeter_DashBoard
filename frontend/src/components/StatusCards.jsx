@@ -35,6 +35,7 @@ function StatusCards({ latest }) {
         <div className="card-value">{formatValue(battery_voltage, 'V')}</div>
       </div>
 
+
       <div className="card">
         <div className="card-label">Current</div>
         <div className="card-value">{formatValue(current, 'A')}</div>

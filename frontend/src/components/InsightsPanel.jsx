@@ -41,6 +41,7 @@ function InsightsPanel({ data }) {
     const totalMs = chargingMs + dischargingMs + idleMs || 1;
     const pct = (ms) => Math.round((ms / totalMs) * 100);
 
+    
     return {
       avgSoC,
       peakVoltage,

@@ -18,6 +18,7 @@ function formatTimeShort(ms) {
   });
 }
 
+
 function TimeSeriesCharts({ data }) {
   if (!data || !data.length) {
     return <p>No data to display.</p>;
