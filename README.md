@@ -4,7 +4,7 @@ Modern React dashboard for real-time visualization of lithium-ion battery teleme
 
 Designed for dealers, fleet operators and service teams to quickly understand battery health, performance trends and usage patterns.
 
-[https://github.com/your-username/battery-telemetry-dashboard](https://github.com/KasavRushikesh09/iTarang_Battery_Telemeter_DashBoard)
+[https://github.com/KasavRushikesh09/iTarang_Battery_Telemeter_DashBoard](https://github.com/KasavRushikesh09/iTarang_Battery_Telemeter_DashBoard)
 
 ## ✨ Features
 
