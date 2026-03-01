@@ -15,24 +15,24 @@ async function loadTelemetryData() {
 
 app.get('/api/telemetry', async (req, res) => {
   try {
-    // 1️⃣ get page & limit from URL
+    // 1 get page & limit from URL
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 50;
 
-    // 2️⃣ calculate how many records to skip
+    // 2️ calculate how many records to skip
     const skip = (page - 1) * limit;
 
-    // 3️⃣ fetch only required records
+    // 3️ fetch only required records
     const data = await Telemetry
       .find()
       .sort({ time: -1 })   // latest first
       .skip(skip)
       .limit(limit);
 
-    // 4️⃣ get total count
+    // 4️ get total count
     const total = await Telemetry.countDocuments();
 
-    // 5️⃣ send response
+    // 5 send response
     res.json({
       page,
       totalPages: Math.ceil(total / limit),
